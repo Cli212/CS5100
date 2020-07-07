@@ -3,20 +3,24 @@ import argparse
 import random
 import re
 
-def print_grid(grid,x,y):
+def print_grid(grid,x,y,wlines):
     for row in range(weight):
         if row == x:
             l = grid[row].copy()
             l.insert(y,'[')
             l.insert(y+2,']')
             print(' '.join([str(i) for i in l]))
+            wlines.append(' '.join([str(i) for i in l]))
         else:
             print(' '.join([str(i) for i in grid[row]]))
+            wlines.append(' '.join([str(i) for i in grid[row]]))
+    return wlines
 
 def reflex(grid,x,y,moves,weight,height):
     ops = ['L', 'R', 'U', 'D']
     performance = 0
     index = 0
+    wlines = []
     while moves:
         if grid[x][y]>0:
             performance+=grid[x][y]
@@ -45,15 +49,20 @@ def reflex(grid,x,y,moves,weight,height):
                 else:
                     x+=1
         print(f'{op} {performance}')
+        wlines.append(f'{op} {performance}')
         moves -= 1
         index += 1
         if index%5 == 0:
-            print_grid(grid,x,y)
+            wlines = print_grid(grid, x, y, wlines)
+    with open('output_partA1.txt', 'w') as f:
+        for i in wlines:
+            f.write(i + '\n')
 
 def reflex_greedy(grid,x,y,moves,weight,height):
     ops = ['L', 'R', 'U', 'D']
     performance = 0
     index = 0
+    wlines = []
     while moves:
         if grid[x][y] > 0:
             performance += grid[x][y]
@@ -86,7 +95,8 @@ def reflex_greedy(grid,x,y,moves,weight,height):
                         x1 += 1
                 if steps != []:
                     if grid[steps[0][1]][steps[0][2]] < grid[x1][y1]:
-                        steps.pop()
+                        while steps != []:
+                            steps.pop()
                     elif grid[steps[0][1]][steps[0][2]] == grid[x1][y1]:
                         pass
                     else:
@@ -98,22 +108,28 @@ def reflex_greedy(grid,x,y,moves,weight,height):
             y = step[2]
 
         print(f'{op} {performance}')
+        wlines.append(f'{op} {performance}')
         moves -= 1
         index += 1
         if index % 5 == 0:
-            print_grid(grid, x, y)
+            wlines = print_grid(grid, x, y, wlines)
+    with open('output_partB1.txt', 'w') as f:
+        for i in wlines:
+            f.write(i + '\n')
+
 
 def model_reflex(grid,x,y,moves,weight,height):
-    Memory = {}
     ops = ['L', 'R', 'U', 'D']
     performance = 0
     index = 0
+    wlines = []
+    memory = [[False for i in range(height)] for j in range(weight)]
     while moves:
         if grid[x][y] > 0:
             performance += grid[x][y]
             op = 'S'
             grid[x][y] = 0
-            Memory[(x,y)] = 0
+            memory[x][y] = True
         else:
             steps = []
             for op in ops:
@@ -124,24 +140,33 @@ def model_reflex(grid,x,y,moves,weight,height):
                         continue
                     else:
                         y1 -= 1
+                        if memory[x1][y1]:
+                            continue
                 elif op == 'R':
                     if y1 == height - 1:
                         continue
                     else:
                         y1 += 1
+                        if memory[x1][y1]:
+                            continue
                 elif op == 'U':
                     if x1 == 0:
                         continue
                     else:
                         x1 -= 1
+                        if memory[x1][y1]:
+                            continue
                 elif op == 'D':
                     if x1 == weight - 1:
                         continue
                     else:
                         x1 += 1
+                        if memory[x1][y1]:
+                            continue
                 if steps != []:
                     if grid[steps[0][1]][steps[0][2]] < grid[x1][y1]:
-                        steps.pop()
+                        while steps != []:
+                            steps.pop()
                     elif grid[steps[0][1]][steps[0][2]] == grid[x1][y1]:
                         pass
                     else:
@@ -153,10 +178,14 @@ def model_reflex(grid,x,y,moves,weight,height):
             y = step[2]
 
         print(f'{op} {performance}')
+        wlines.append(f'{op} {performance}')
         moves -= 1
         index += 1
         if index % 5 == 0:
-            print_grid(grid, x, y)
+            wlines = print_grid(grid, x, y,wlines)
+    with open('output_partC1.txt','w') as f:
+        for i in wlines:
+            f.write(i+'\n')
 
 if __name__ == '__main__':
     with open('environ.txt','r') as f:
@@ -184,5 +213,5 @@ if __name__ == '__main__':
         reflex(grid,init_x,init_y,moves,weight,height)
     elif args.ques == '2':
         reflex_greedy(grid,init_x,init_y,moves,weight,height)
-    # else:
-    #     model_reflex()
+    else:
+        model_reflex(grid,init_x,init_y,moves,weight,height)
