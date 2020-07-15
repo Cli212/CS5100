@@ -13,7 +13,7 @@ TIE = 2
 WIN_VAL = 100
 WHITE_TO_PLAY = True
 DEMO_SEARCH_DEPTH = 5
-
+POINT = 0
 # We'll sometimes iterate over this to look in all 8 directions from a particular square.
 # The values are the "delta" differences in row, col from the original square.
 # (Hence no (0,0), which would be the same square.)
@@ -140,9 +140,38 @@ def check_game_over(board):
 # white_turn determines who would get to move next
 # search depth is the depth remaining, decremented for recursive calls
 # alpha and beta are the bounds on viable play values used in alpha-beta pruning
+
+def value(board):
+    white_count = np.count_nonzero(board == WHITE)
+    black_count = np.count_nonzero(board == BLACK)
+    return white_count-black_count
+
 def minimax_value(board, white_turn, search_depth, alpha, beta):
     # TODO
-    return 0
+
+    if search_depth == 0:
+        return value(board)
+    point = None
+    if white_turn:
+        moves = generate_legal_moves(board,True)
+        if len(moves) == 0:
+            return minimax_value(board, False, search_depth - 1, alpha, beta)
+        for move in moves:
+            current_value = minimax_value(play_move(board, move, True),False,search_depth-1,float('-inf'),float('inf'))
+            if alpha > current_value:
+                continue
+            alpha = current_value
+        return alpha
+    else:
+        moves = generate_legal_moves(board, False)
+        if len(moves) == 0:
+            return minimax_value(board, True, search_depth - 1, float('-inf'), float('inf'))
+        for move in moves:
+            current_value = minimax_value(play_move(board, move, False),True,search_depth-1,float('-inf'),float('inf'))
+            if beta < current_value:
+                continue
+            beta = current_value
+        return beta
 
 # Printing a board (and return null), for interactive mode
 def print_board(board):
