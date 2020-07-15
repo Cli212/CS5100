@@ -136,13 +136,36 @@ def check_game_over(board):
     # I guess the game's over
     return find_winner(board)
 
-# minimax_value:  assumes white is MAX and black is MIN (even if black uses this function)
-# white_turn determines who would get to move next
-# search depth is the depth remaining, decremented for recursive calls
-# alpha and beta are the bounds on viable play values used in alpha-beta pruning
+def value(board):
+    white_count = np.count_nonzero(board == WHITE)
+    black_count = np.count_nonzero(board == BLACK)
+    return white_count-black_count
+
 def minimax_value(board, white_turn, search_depth, alpha, beta):
     # TODO
-    return 0
+    if search_depth == 0:
+        return value(board)
+    point = None
+    if white_turn:
+        moves = generate_legal_moves(board,True)
+        if len(moves) == 0:
+            return minimax_value(board, False, search_depth - 1, alpha, beta)
+        for move in moves:
+            current_value = minimax_value(play_move(board, move, True),False,search_depth-1,alpha,beta)
+            alpha = max(alpha,current_value)
+            if alpha>=beta:
+                break
+        return alpha
+    else:
+        moves = generate_legal_moves(board, False)
+        if len(moves) == 0:
+            return minimax_value(board, True, search_depth - 1, alpha,beta)
+        for move in moves:
+            current_value = minimax_value(play_move(board, move, False),True,search_depth-1,alpha,beta)
+            beta = min(beta,current_value)
+            if alpha>=beta:
+                break
+        return beta
 
 # Printing a board (and return null), for interactive mode
 def print_board(board):

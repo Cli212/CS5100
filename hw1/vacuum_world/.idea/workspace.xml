@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4c2ad02d-e7f5-4d27-8cdc-49b2fd93a3b0" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/deployment.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/vacuum_agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/vacuum_agent.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -27,7 +25,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../hw2/othello" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -63,7 +61,8 @@
       <workItem from="1594102385453" duration="11599000" />
       <workItem from="1594121064443" duration="1636000" />
       <workItem from="1594122817618" duration="1818000" />
-      <workItem from="1594127751865" duration="6189000" />
+      <workItem from="1594127751865" duration="6790000" />
+      <workItem from="1594734303499" duration="23000" />
     </task>
     <servers />
   </component>
